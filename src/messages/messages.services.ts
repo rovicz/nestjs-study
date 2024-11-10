@@ -11,7 +11,7 @@ export class MessagesService {
     if (id === "2") return "Mensagem 2: Você ta explorando bem, em!";
   }
 
-  createMessage(id: string): string {
-    return `Mensagem criada com sucesso (id: ${id})`;
+  createMessage(body: any): any {
+    return body;
   }
 }
