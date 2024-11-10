@@ -17,6 +17,6 @@ export class AppController {
 
   @Get("/girlfriend")
   getVictorGirfrield(): any {
-    return "Júlia Batista Santos";
+    return this.appService.getGirlfriend();
   }
 }

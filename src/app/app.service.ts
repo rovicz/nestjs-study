@@ -10,4 +10,8 @@ export class AppService {
     const date: Date = new Date();
     return `actualDate: ${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
   }
+
+  getGirlfriend(): any {
+    return "Júlia Batista Santos";
+  }
 }
