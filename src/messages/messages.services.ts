@@ -12,6 +12,17 @@ export class MessagesService {
   }
 
   createMessage(body: any): any {
-    return body;
+    if (body.id && body.message) {
+      return {
+        ...body,
+        status: 201,
+      };
+    } else {
+      return {
+        status: 404,
+        message:
+          "Erro ao criar a mensagem, necessário respeitar os paramêtros do body.",
+      };
+    }
   }
 }
