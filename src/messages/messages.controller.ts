@@ -1,12 +1,21 @@
-import { Controller } from "@nestjs/common";
+import { Controller, Get, Param, Post } from "@nestjs/common";
+import { MessagesService } from "./messages.services";
 
 @Controller("messages")
 export class MessagesController {
+  constructor(private readonly messagesService: MessagesService) {}
+  @Get()
   findAll() {
-    return "Essa rota retorna todos os recados.";
+    return this.messagesService.findAll();
   }
 
-  findOne() {
-    return "Essa rota retorna um recado.";
+  @Get(":id")
+  findOne(@Param("id") id: string) {
+    return this.messagesService.findOne(id);
+  }
+
+  @Post("create/:id")
+  createMessage(@Param("id") id: string): any {
+    return this.messagesService.createMessage(id);
   }
 }
