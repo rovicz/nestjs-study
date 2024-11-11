@@ -1,58 +1,67 @@
 import { Injectable } from "@nestjs/common";
+import { Message } from "./entities/message.entity";
 
 @Injectable()
 export class MessagesService {
-  findAll(): string {
-    return "Essa rota retorna todas as mensagens.";
+  private lastId = 1;
+  private messages: Message[] = [
+    {
+      id: 1,
+      message: "Olá, meu nome é Victor!",
+      de: "Victor",
+      para: "Júlia",
+      lido: false,
+      data: new Date(),
+    },
+  ];
+
+  findAll(): any {
+    return this.messages;
   }
 
-  findOne(id: string): string {
-    if (id === "1") return "Mensagem 1: Parabéns, você acessou a rota.";
-    if (id === "2") return "Mensagem 2: Você ta explorando bem, em!";
+  findOne(id: string): any {
+    return this.messages.filter((item) => item.id === +id);
   }
 
-  findByQuery(query: any): string {
-    if (query) {
-      return `Você procurou pela query: ${query.message}`;
-    } else {
-      return "Você precisa inserir uma query valida.";
-    }
+  findByQuery(query: any): any {
+    const messageByQuery = this.messages.filter(
+      (item) => item.id === +query.id,
+    );
+
+    return messageByQuery;
   }
 
   createMessage(body: any): any {
-    if (body.id && body.message) {
-      return {
-        ...body,
-        status: 201,
-      };
-    } else {
-      return {
-        status: 404,
-        message:
-          "Erro ao criar a mensagem, necessário respeitar os paramêtros do body.",
-      };
-    }
+    this.lastId++;
+    const id = this.lastId;
+    const newMessage = {
+      id,
+      ...body,
+    };
+    this.messages.push(newMessage);
+    return newMessage;
   }
 
   updateMessage(id: string, body: any): any {
-    if (id && body) {
-      return {
+    const MessageIndex = this.messages.findIndex((item) => item.id === +id);
+
+    if (MessageIndex >= 0) {
+      const messageExistent = this.messages[MessageIndex];
+      this.messages[MessageIndex] = {
+        ...messageExistent,
         ...body,
-        statusMesage: `Mensagem de ID ${id} atualizado com sucesso.`,
       };
-    } else {
-      return {
-        status: 404,
-        message:
-          "Erro ao atualizar a mensagem, necessário respeitar os paramêtros do body.",
-      };
+
+      return "Mensagem atualizada com sucesso!";
     }
   }
 
   deleteMessage(id: string): any {
-    return {
-      id,
-      statusMesage: `Mensagem de ID ${id} deletada com sucesso.`,
-    };
+    const MessageIndex = this.messages.findIndex((item) => item.id === +id);
+
+    if (MessageIndex >= 0) {
+      this.messages.splice(MessageIndex, 1);
+      return "Mensagem Apagada com Sucesso.";
+    }
   }
 }
