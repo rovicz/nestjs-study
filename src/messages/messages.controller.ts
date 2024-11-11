@@ -30,7 +30,6 @@ export class MessagesController {
 
   @Get("/query")
   findByQuery(@Query() query: string) {
-    console.log(query);
     return this.messagesService.findByQuery(query);
   }
 
