@@ -25,4 +25,19 @@ export class MessagesService {
       };
     }
   }
+
+  updateMessage(id: string, body: any): any {
+    if (id && body) {
+      return {
+        ...body,
+        statusMesage: `Mensagem de ID ${id} atualizado com sucesso.`,
+      };
+    } else {
+      return {
+        status: 404,
+        message:
+          "Erro ao atualizar a mensagem, necessário respeitar os paramêtros do body.",
+      };
+    }
+  }
 }

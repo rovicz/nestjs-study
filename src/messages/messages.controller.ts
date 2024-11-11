@@ -1,5 +1,15 @@
-import { Body, Controller, Get, Param, Post } from "@nestjs/common";
+import { Body, Controller, Get, Param, Patch, Post } from "@nestjs/common";
 import { MessagesService } from "./messages.services";
+
+// CRUD
+// Create -> POST -> Criar um recado
+// Read -> GET -> Ler todos os recados
+// Read -> GET -> Ler apenas um recado
+// Update -> PATCH / PUT -> Atualizar um recado
+// Delete -> DELETE -> Apagar um recado
+
+// PATCH é utilizado para atualizar dados de um recurso
+// PUT é utilizado para atualizar um recurso inteiro
 
 @Controller("messages")
 export class MessagesController {
@@ -17,5 +27,10 @@ export class MessagesController {
   @Post("create")
   createMessage(@Body() body: any): any {
     return this.messagesService.createMessage(body);
+  }
+
+  @Patch("update/:id")
+  updateMessage(@Param("id") id: string, @Body() body: any): any {
+    return this.messagesService.updateMessage(id, body);
   }
 }
