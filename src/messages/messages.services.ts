@@ -40,4 +40,11 @@ export class MessagesService {
       };
     }
   }
+
+  deleteMessage(id: string): any {
+    return {
+      id,
+      statusMesage: `Mensagem de ID ${id} deletada com sucesso.`,
+    };
+  }
 }

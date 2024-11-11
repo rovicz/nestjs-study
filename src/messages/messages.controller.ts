@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Patch, Post } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+} from "@nestjs/common";
 import { MessagesService } from "./messages.services";
 
 // CRUD
@@ -32,5 +40,10 @@ export class MessagesController {
   @Patch("update/:id")
   updateMessage(@Param("id") id: string, @Body() body: any): any {
     return this.messagesService.updateMessage(id, body);
+  }
+
+  @Delete("delete/:id")
+  deleteMessage(@Param("id") id: string): any {
+    return this.messagesService.deleteMessage(id);
   }
 }
