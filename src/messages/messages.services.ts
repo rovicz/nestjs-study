@@ -11,6 +11,14 @@ export class MessagesService {
     if (id === "2") return "Mensagem 2: Você ta explorando bem, em!";
   }
 
+  findByQuery(query: any): string {
+    if (query) {
+      return `Você procurou pela query: ${query.message}`;
+    } else {
+      return "Você precisa inserir uma query valida.";
+    }
+  }
+
   createMessage(body: any): any {
     if (body.id && body.message) {
       return {

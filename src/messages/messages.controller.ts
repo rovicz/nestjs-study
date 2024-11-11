@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from "@nestjs/common";
 import { MessagesService } from "./messages.services";
 
@@ -25,6 +26,12 @@ export class MessagesController {
   @Get()
   findAll() {
     return this.messagesService.findAll();
+  }
+
+  @Get("/query")
+  findByQuery(@Query() query: string) {
+    console.log(query);
+    return this.messagesService.findByQuery(query);
   }
 
   @Get(":id")
