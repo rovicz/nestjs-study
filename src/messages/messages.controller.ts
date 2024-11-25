@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   Query,
@@ -36,7 +37,7 @@ export class MessagesController {
   }
 
   @Get(":id")
-  findOne(@Param("id") id: string) {
+  findOne(@Param("id", ParseIntPipe) id: number) {
     return this.messagesService.findOne(id);
   }
 
@@ -51,7 +52,7 @@ export class MessagesController {
   }
 
   @Delete("delete/:id")
-  deleteMessage(@Param("id") id: string): any {
+  deleteMessage(@Param("id", ParseIntPipe) id: number): any {
     return this.messagesService.deleteMessage(id);
   }
 }

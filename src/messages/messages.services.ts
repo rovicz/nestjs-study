@@ -21,8 +21,8 @@ export class MessagesService {
     return this.messages;
   }
 
-  findOne(id: string): any {
-    const message = this.messages.find((item) => item.id === +id);
+  findOne(id: number): any {
+    const message = this.messages.find((item) => item.id === id);
 
     if (message) {
       return message;
@@ -33,7 +33,7 @@ export class MessagesService {
   }
 
   findByQuery(query: any): any {
-    const messageByQuery = this.messages.find((item) => item.id === +query.id);
+    const messageByQuery = this.messages.find((item) => item.id === query.id);
 
     if (messageByQuery) {
       return messageByQuery;
@@ -92,7 +92,7 @@ export class MessagesService {
     }
   }
 
-  deleteMessage(id: string): any {
+  deleteMessage(id: number): any {
     const MessageIndex = this.messages.findIndex((item) => item.id === +id);
 
     if (MessageIndex >= 0) {
