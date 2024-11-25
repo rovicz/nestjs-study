@@ -1,5 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { Message } from "./entities/message.entity";
+import { UpdateMessageDTO } from "./dto/update-message.dto";
+import { CreateMessageDTO } from "./dto/create-message.dto";
 
 @Injectable()
 export class MessagesService {
@@ -40,22 +42,43 @@ export class MessagesService {
     }
   }
 
-  createMessage(body: any): any {
+  createMessage(body: CreateMessageDTO): any {
     this.lastId++;
     const id = this.lastId;
+
+    if (!body.de || !body.para || !body.message) {
+      throw new HttpException(
+        "Não foi possível criar a mensagem, o envio dos dados não foram corretos.",
+        HttpStatus.EXPECTATION_FAILED,
+      );
+    }
+
     const newMessage = {
       id,
       ...body,
+      lido: false,
+      data: new Date(),
     };
+
     this.messages.push(newMessage);
     return newMessage;
   }
 
-  updateMessage(id: string, body: any): any {
-    const MessageIndex = this.messages.findIndex((item) => item.id === +id);
+  updateMessage(body: UpdateMessageDTO): any {
+    const MessageIndex = this.messages.findIndex(
+      (item) => item.id === +body.id,
+    );
+
+    if (!body.id || !body.message) {
+      throw new HttpException(
+        "Não foi possível criar a mensagem, o envio dos dados não foram corretos.",
+        HttpStatus.EXPECTATION_FAILED,
+      );
+    }
 
     if (MessageIndex >= 0) {
       const messageExistent = this.messages[MessageIndex];
+
       this.messages[MessageIndex] = {
         ...messageExistent,
         ...body,

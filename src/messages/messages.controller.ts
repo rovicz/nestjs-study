@@ -9,6 +9,8 @@ import {
   Query,
 } from "@nestjs/common";
 import { MessagesService } from "./messages.services";
+import { CreateMessageDTO } from "./dto/create-message.dto";
+import { UpdateMessageDTO } from "./dto/update-message.dto";
 
 // CRUD
 // Create -> POST -> Criar um recado
@@ -39,13 +41,13 @@ export class MessagesController {
   }
 
   @Post("create")
-  createMessage(@Body() body: any): any {
+  createMessage(@Body() body: CreateMessageDTO): any {
     return this.messagesService.createMessage(body);
   }
 
-  @Patch("update/:id")
-  updateMessage(@Param("id") id: string, @Body() body: any): any {
-    return this.messagesService.updateMessage(id, body);
+  @Patch("update")
+  updateMessage(@Body() body: UpdateMessageDTO): any {
+    return this.messagesService.updateMessage(body);
   }
 
   @Delete("delete/:id")
