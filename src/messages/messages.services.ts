@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { Message } from "./entities/message.entity";
 
 @Injectable()
@@ -20,15 +20,24 @@ export class MessagesService {
   }
 
   findOne(id: string): any {
-    return this.messages.filter((item) => item.id === +id);
+    const message = this.messages.find((item) => item.id === +id);
+
+    if (message) {
+      return message;
+    } else {
+      throw new HttpException("Mensagem não encontrada.", HttpStatus.NOT_FOUND);
+      //throw new NotFoundException("Mensagem não encontrada!"); // Alternativa de return de Erro.
+    }
   }
 
   findByQuery(query: any): any {
-    const messageByQuery = this.messages.filter(
-      (item) => item.id === +query.id,
-    );
+    const messageByQuery = this.messages.find((item) => item.id === +query.id);
 
-    return messageByQuery;
+    if (messageByQuery) {
+      return messageByQuery;
+    } else {
+      throw new HttpException("Mensagem não encontrada.", HttpStatus.NOT_FOUND);
+    }
   }
 
   createMessage(body: any): any {
@@ -54,6 +63,10 @@ export class MessagesService {
 
       return "Mensagem atualizada com sucesso!";
     }
+
+    if (MessageIndex < 0) {
+      throw new HttpException("Mensagem não encontrada.", HttpStatus.NOT_FOUND);
+    }
   }
 
   deleteMessage(id: string): any {
@@ -61,7 +74,11 @@ export class MessagesService {
 
     if (MessageIndex >= 0) {
       this.messages.splice(MessageIndex, 1);
-      return "Mensagem Apagada com Sucesso.";
+      return "Mensagem apagada com sucesso.";
+    }
+
+    if (MessageIndex < 0) {
+      throw new HttpException("Mensagem não encontrada.", HttpStatus.NOT_FOUND);
     }
   }
 }
