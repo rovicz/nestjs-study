@@ -2,9 +2,16 @@ import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { Message } from "./entities/message.entity";
 import { UpdateMessageDTO } from "./dto/update-message.dto";
 import { CreateMessageDTO } from "./dto/create-message.dto";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
 
 @Injectable()
 export class MessagesService {
+  constructor(
+    @InjectRepository(Message)
+    private readonly messagesRepository: Repository<Message>,
+  ) {}
+
   private lastId = 1;
   private messages: Message[] = [
     {
@@ -17,12 +24,16 @@ export class MessagesService {
     },
   ];
 
-  findAll(): any {
-    return this.messages;
+  findAll() {
+    return this.messagesRepository.find();
   }
 
-  findOne(id: number): any {
-    const message = this.messages.find((item) => item.id === id);
+  async findOne(id: number) {
+    const message = await this.messagesRepository.findOne({
+      where: {
+        id,
+      },
+    });
 
     if (message) {
       return message;
