@@ -43,8 +43,12 @@ export class MessagesService {
     }
   }
 
-  findByQuery(query: any): any {
-    const messageByQuery = this.messages.find((item) => item.id === query.id);
+  async findByQuery(query: any) {
+    const messageByQuery = await this.messagesRepository.findOne({
+      where: {
+        id: query.id,
+      },
+    });
 
     if (messageByQuery) {
       return messageByQuery;
@@ -53,10 +57,7 @@ export class MessagesService {
     }
   }
 
-  createMessage(body: CreateMessageDTO): any {
-    this.lastId++;
-    const id = this.lastId;
-
+  async createMessage(body: CreateMessageDTO) {
     if (!body.de || !body.para || !body.message) {
       throw new HttpException(
         "Não foi possível criar a mensagem, o envio dos dados não foram corretos.",
@@ -65,14 +66,14 @@ export class MessagesService {
     }
 
     const newMessage = {
-      id,
       ...body,
       lido: false,
       data: new Date(),
     };
 
-    this.messages.push(newMessage);
-    return newMessage;
+    const messageCreated = await this.messagesRepository.create(newMessage);
+
+    return this.messagesRepository.save(messageCreated);
   }
 
   updateMessage(body: UpdateMessageDTO): any {
@@ -103,16 +104,16 @@ export class MessagesService {
     }
   }
 
-  deleteMessage(id: number): any {
-    const MessageIndex = this.messages.findIndex((item) => item.id === +id);
+  async deleteMessage(id: number) {
+    const message = await this.messagesRepository.findOneBy({ id });
 
-    if (MessageIndex >= 0) {
-      this.messages.splice(MessageIndex, 1);
-      return "Mensagem apagada com sucesso.";
+    if (!message) {
+      throw new HttpException("Mensagem não encontrada.", HttpStatus.NOT_FOUND);
     }
 
-    if (MessageIndex < 0) {
-      throw new HttpException("Mensagem não encontrada.", HttpStatus.NOT_FOUND);
+    if (message) {
+      this.messagesRepository.remove(message);
+      return "Mensagem apagada com sucesso.";
     }
   }
 }
