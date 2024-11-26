@@ -76,11 +76,7 @@ export class MessagesService {
     return this.messagesRepository.save(messageCreated);
   }
 
-  updateMessage(body: UpdateMessageDTO): any {
-    const MessageIndex = this.messages.findIndex(
-      (item) => item.id === +body.id,
-    );
-
+  async updateMessage(body: UpdateMessageDTO) {
     if (!body.id || !body.message) {
       throw new HttpException(
         "Não foi possível criar a mensagem, o envio dos dados não foram corretos.",
@@ -88,20 +84,16 @@ export class MessagesService {
       );
     }
 
-    if (MessageIndex >= 0) {
-      const messageExistent = this.messages[MessageIndex];
+    const message = await this.messagesRepository.preload({
+      id: body.id,
+      ...body,
+    });
 
-      this.messages[MessageIndex] = {
-        ...messageExistent,
-        ...body,
-      };
-
-      return "Mensagem atualizada com sucesso!";
-    }
-
-    if (MessageIndex < 0) {
+    if (!message) {
       throw new HttpException("Mensagem não encontrada.", HttpStatus.NOT_FOUND);
     }
+
+    if (message) return this.messagesRepository.save(message);
   }
 
   async deleteMessage(id: number) {
