@@ -13,7 +13,7 @@ export class MessagesService {
       de: "Victor",
       para: "Júlia",
       lido: false,
-      data: new Date(),
+      createdAt: new Date(),
     },
   ];
 
