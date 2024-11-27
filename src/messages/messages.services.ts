@@ -12,18 +12,6 @@ export class MessagesService {
     private readonly messagesRepository: Repository<Message>,
   ) {}
 
-  private lastId = 1;
-  private messages: Message[] = [
-    {
-      id: 1,
-      message: "Olá, meu nome é Victor!",
-      de: "Victor",
-      para: "Júlia",
-      lido: false,
-      createdAt: new Date(),
-    },
-  ];
-
   findAll() {
     return this.messagesRepository.find();
   }
