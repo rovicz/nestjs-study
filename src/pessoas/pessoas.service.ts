@@ -1,4 +1,9 @@
-import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
+import {
+  ConflictException,
+  HttpException,
+  HttpStatus,
+  Injectable,
+} from "@nestjs/common";
 import { CreatePessoaDto } from "./dto/create-pessoa.dto";
 import { UpdatePessoaDto } from "./dto/update-pessoa.dto";
 import { InjectRepository } from "@nestjs/typeorm";
@@ -32,7 +37,7 @@ export class PessoasService {
       return novaPessoa;
     } catch (error) {
       if (error.code === "23505") {
-        return "Esse e-mail já foi cadastrado!";
+        throw new ConflictException("E-mail já cadastrado!");
       }
     }
   }
