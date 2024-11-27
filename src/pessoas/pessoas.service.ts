@@ -42,15 +42,28 @@ export class PessoasService {
     }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} pessoa`;
+  async findOne(id: number) {
+    const pessoa = await this.pessoasRepository.findOneBy({ id });
+
+    if (pessoa) {
+      return pessoa;
+    } else {
+      throw new HttpException("Mensagem não encontrada.", HttpStatus.NOT_FOUND);
+    }
   }
 
   update(id: number, updatePessoaDto: UpdatePessoaDto) {
     return updatePessoaDto;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} pessoa`;
+  async remove(id: number) {
+    const pessoa = await this.pessoasRepository.findOneBy({ id });
+
+    if (pessoa) {
+      this.pessoasRepository.remove(pessoa);
+      return "Pessoa apagada com sucesso.";
+    } else {
+      throw new HttpException("Pessoa não encontrada.", HttpStatus.NOT_FOUND);
+    }
   }
 }
