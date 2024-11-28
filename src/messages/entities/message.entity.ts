@@ -1,7 +1,10 @@
+import { Pessoa } from "src/pessoas/entities/pessoa.entity";
 import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
@@ -14,10 +17,14 @@ export class Message {
   @Column()
   message: string;
 
-  @Column()
-  de: string;
+  // mais de um recado pode ser enviado POR uma ÚNICA pessoa.
+  @ManyToOne(() => Pessoa)
+  @JoinColumn({ name: "de" })
+  de: Pessoa;
 
-  @Column()
+  // mais de um recado pode ser enviado PARA uma ÚNICA pessoa.
+  @ManyToOne(() => Pessoa)
+  @JoinColumn({ name: "para" })
   para: string;
 
   @Column({ default: false })
