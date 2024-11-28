@@ -4,22 +4,50 @@ import { UpdateMessageDTO } from "./dto/update-message.dto";
 import { CreateMessageDTO } from "./dto/create-message.dto";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
+import { PessoasService } from "src/pessoas/pessoas.service";
 
 @Injectable()
 export class MessagesService {
   constructor(
     @InjectRepository(Message)
     private readonly messagesRepository: Repository<Message>,
+    private readonly pessoasService: PessoasService,
   ) {}
 
   findAll() {
-    return this.messagesRepository.find();
+    return this.messagesRepository.find({
+      relations: ["de", "para"],
+      order: {
+        id: "desc",
+      },
+      select: {
+        de: {
+          id: true,
+          name: true,
+        },
+        para: {
+          id: true,
+          name: true,
+        },
+      },
+    });
   }
 
   async findOne(id: number) {
     const message = await this.messagesRepository.findOne({
       where: {
         id,
+      },
+      relations: ["de", "para"],
+      select: {
+        de: {
+          id: true,
+          name: true,
+        },
+        para: {
+          id: true,
+          name: true,
+        },
       },
     });
 
@@ -53,15 +81,31 @@ export class MessagesService {
       );
     }
 
+    const { deId, paraId } = body;
+
+    const de = await this.pessoasService.findOne(deId);
+    const para = await this.pessoasService.findOne(paraId);
+
     const newMessage = {
-      ...body,
+      message: body.message,
+      de: de,
+      para: para,
       lido: false,
       data: new Date(),
     };
 
     const messageCreated = await this.messagesRepository.create(newMessage);
+    await this.messagesRepository.save(messageCreated);
 
-    return this.messagesRepository.save(messageCreated);
+    return {
+      ...messageCreated,
+      de: {
+        id: messageCreated.de.id,
+      },
+      para: {
+        id: messageCreated.para.id,
+      },
+    };
   }
 
   async updateMessage(body: UpdateMessageDTO) {

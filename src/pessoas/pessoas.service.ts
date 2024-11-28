@@ -48,7 +48,7 @@ export class PessoasService {
     if (pessoa) {
       return pessoa;
     } else {
-      throw new HttpException("Mensagem não encontrada.", HttpStatus.NOT_FOUND);
+      throw new HttpException("Pessoa não encontrada.", HttpStatus.NOT_FOUND);
     }
   }
 

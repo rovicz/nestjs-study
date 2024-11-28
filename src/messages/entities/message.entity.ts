@@ -25,7 +25,7 @@ export class Message {
   // mais de um recado pode ser enviado PARA uma ÚNICA pessoa.
   @ManyToOne(() => Pessoa)
   @JoinColumn({ name: "para" })
-  para: string;
+  para: Pessoa;
 
   @Column({ default: false })
   lido: boolean;
