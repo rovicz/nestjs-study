@@ -18,12 +18,12 @@ export class Message {
   message: string;
 
   // mais de um recado pode ser enviado POR uma ÚNICA pessoa.
-  @ManyToOne(() => Pessoa)
+  @ManyToOne(() => Pessoa, { onDelete: "CASCADE", onUpdate: "CASCADE" })
   @JoinColumn({ name: "de" })
   de: Pessoa;
 
   // mais de um recado pode ser enviado PARA uma ÚNICA pessoa.
-  @ManyToOne(() => Pessoa)
+  @ManyToOne(() => Pessoa, { onDelete: "CASCADE", onUpdate: "CASCADE" })
   @JoinColumn({ name: "para" })
   para: Pessoa;
 

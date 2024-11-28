@@ -74,7 +74,7 @@ export class MessagesService {
   }
 
   async createMessage(body: CreateMessageDTO) {
-    if (!body.message) {
+    if (!body.message || !body.deId || !body.paraId) {
       throw new HttpException(
         "Não foi possível criar a mensagem, o envio dos dados não foram corretos.",
         HttpStatus.EXPECTATION_FAILED,
