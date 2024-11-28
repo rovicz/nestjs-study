@@ -52,8 +52,19 @@ export class PessoasService {
     }
   }
 
-  update(id: number, updatePessoaDto: UpdatePessoaDto) {
-    return updatePessoaDto;
+  async update(id: number, updatePessoaDto: UpdatePessoaDto) {
+    const dataPessoa = {
+      name: updatePessoaDto?.name,
+      passwordHash: updatePessoaDto?.password,
+    };
+
+    const pessoa = await this.pessoasRepository.preload({ id, ...dataPessoa });
+
+    if (!pessoa) {
+      throw new HttpException("Pessoa não encontrada.", HttpStatus.NOT_FOUND);
+    }
+
+    return this.pessoasRepository.save(pessoa);
   }
 
   async remove(id: number) {

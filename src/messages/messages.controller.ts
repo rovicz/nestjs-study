@@ -9,7 +9,7 @@ import {
   Post,
   Query,
 } from "@nestjs/common";
-import { MessagesService } from "./messages.services";
+import { MessagesService } from "./messages.service";
 import { CreateMessageDTO } from "./dto/create-message.dto";
 import { UpdateMessageDTO } from "./dto/update-message.dto";
 

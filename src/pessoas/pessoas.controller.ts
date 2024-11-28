@@ -26,7 +26,7 @@ export class PessoasController {
     return this.pessoasService.findOne(id);
   }
 
-  @Patch("update")
+  @Patch("update/:id")
   update(@Param("id", ParseIntPipe) id: number, @Body() body: UpdatePessoaDto) {
     return this.pessoasService.update(id, body);
   }
